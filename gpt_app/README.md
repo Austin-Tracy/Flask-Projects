@@ -55,7 +55,10 @@ This is a GPT application developed to manage and create interactive study conve
 ## Utilities
 
 - `generate_keywords(question_list: list) -> list`: Generates keywords from a list of questions.
+- `get_turbo_gpt_response(user_input: str) -> openai.openai_object.OpenAIObject:` Sends a prompt to OpenAI's GPT-3 API using the Turbo model and returns the response.
+- `debug_gpt_response_string(response: str, verbose: bool = False) -> str:` Formats the response and offers verbose debug if 'verbose' flag is set to True.
 - `get_gpt_response(prompt: str) -> dict`: Sends a prompt to OpenAI's GPT-3 API and returns the response.
+- `generate_study_questions(conversation_id: int, selected_topic: str, verbose: bool = False) -> List[Dict[str, Union[str, Dict[str, str]]]]:`: Generates 5 study questions for a given topic.
 
 ## Logging
 
