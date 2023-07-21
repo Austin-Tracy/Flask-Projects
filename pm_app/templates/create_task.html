@@ -1,0 +1,30 @@
+<!--pm_app/templates/create_task.html-->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Create Task</h1>
+    <form method="POST" action="{{ url_for('main.create_task') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            
+            <div class="input-container">
+                {{ form.title.label }} {{ form.title(class="form-control", id="task-title") }}
+                <span id="suggested-remainder" class="suggested-remainder"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.description.label }} {{ form.description(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.deadline.label }} {{ form.deadline(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.project_id.label }} {{ form.project_id(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

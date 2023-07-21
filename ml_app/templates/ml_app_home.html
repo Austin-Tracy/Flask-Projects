@@ -1,0 +1,87 @@
+<!--ml_app/templates/ml_app_home.html-->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Machine Learning Models</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">Logistic Regression</h5>
+                    <p class="card-text">Explore and interact with the logistic regression model.</p>
+                    <a href="{{ url_for('ml_app.logistic_regression') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">Linear Regression</h5>
+                    <p class="card-text">Explore and interact with the linear regression model.</p>
+                    <a href="{{ url_for('ml_app.linear_regression') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">K Nearest Neighbors</h5>
+                    <p class="card-text">Explore and interact with the k_nearest_neighbors model.</p>
+                    <a href="{{ url_for('ml_app.k_nearest_neighbors') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">Frequent Itemsets</h5>
+                    <p class="card-text">Explore and interact with the frequent itemsets model.</p>
+                    <a href="{{ url_for('ml_app.frequent_itemsets') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">Time Series</h5>
+                    <p class="card-text">Explore and interact with the time series model.</p>
+                    <a href="{{ url_for('ml_app.time_series') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">Sentiment Analysis (NLP)</h5>
+                    <p class="card-text">Explore and interact with the sentiment analysis model.</p>
+                    <a href="{{ url_for('ml_app.sentiment_analysis') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">K-Means Clustering</h5>
+                    <p class="card-text">Explore and interact with the K-Means clustering model.</p>
+                    <a href="{{ url_for('ml_app.k_means_clustering') }}" class="btn btn-primary">Go to Model</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card ml-model-card">
+                <div class="card-body">
+                    <h5 class="card-title">Datasets</h5>
+                    <p class="card-text">Explore and interact with datasets used in these models.</p>
+                    <a href="{{ url_for('ml_app.datasets') }}" class="btn btn-primary">Go to Data</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

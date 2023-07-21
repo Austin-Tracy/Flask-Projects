@@ -1,0 +1,56 @@
+<!--ml_app/templates/datasets.html-->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container eda-section max-height: 500px">
+    <h2>Exploratory Data Analysis</h2>
+    <!-- Dropdown selection -->
+    <select class="form-select" id="feature-selection" aria-label="Select Feature">
+        {% for feature in feature_vars %}
+        <option value="{{ feature }}">{{ feature }}</option>
+        {% endfor %}
+    </select>
+    <div class="dropdown-divider"></div>
+    <!-- Feature description -->
+    <p id="feature-description"></p>
+    <div id="feature-descriptions" data-value='{{ feature_descriptions|tojson }}' style="display:none;"></div>
+    <!-- The graph -->
+    <script type="text/javascript">
+        let featureDescriptions = JSON.parse('{{ feature_descriptions | safe }}');
+        console.log(featureDescriptions);
+    </script>
+    <div id="graph"></div>
+
+    <!-- The graph data (hidden) -->
+    {% for feature in feature_vars %}
+    {% if feature in eda_html_dict %}
+    <div id="{{ feature }}-data" style="display: none">{{ eda_html_dict[feature] }}</div>
+    {% endif %}
+    {% endfor %}
+</div>
+<!-- Add this section to display the data -->
+<div class="container data-section">
+    <h2>Churn Data</h2>
+    <div class="task-history-container">
+        <table class="table table-striped"
+            style="max-height: 500px; overflow-y: auto; display: block; fill-rule: evenodd;">
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                    <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

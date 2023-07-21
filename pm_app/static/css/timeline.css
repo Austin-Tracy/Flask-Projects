@@ -1,0 +1,52 @@
+/* app/static/css/timeline.css */
+.timeline {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #2196F3;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+  }
+  
+  .container-timeline {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+  }
+  
+  .container-timeline::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+  
+  .left-timeline .container-timeline::before {
+    left: 100%;
+    border-width: 10px;
+    border-color: transparent transparent transparent #2196F3;
+  }
+  
+  .right-timeline .container-timeline::before {
+    right: 100%;
+    border-width: 10px;
+    border-color: #2196F3 transparent transparent transparent;
+  }
+  
+  .left-timeline .container-timeline {
+    left: 0;
+  }
+  
+  .right-timeline .container-timeline {
+    right: 0;
+  }

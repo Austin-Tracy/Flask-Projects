@@ -1,0 +1,254 @@
+<!--/gpt_app/templates/question.html-->
+{% extends "base.html" %}
+
+{% block content %}
+<div id="flash-message" style="display: none;"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3 class="mb-4">Questions</h3>
+            <div id="question-list" class="list-group">
+                {% for question in study_questions %}
+                <a href="{{ url_for('gpt.question', question_id=question.id, conversation_id=question.conversation_id) }}"
+                    class="list-group-item list-group-item-action">{{ loop.index }}. {{ question.gpt_question }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="question-container" class="col-md-8">
+            <h2 class="mb-4">Topic: {{ selected_topic }}</h2>
+            {% if current_question.is_multiple_choice == True %}
+            <form method="POST" id="question-form">
+                {{ multiple_choice_form.hidden_tag() }}
+                {{ multiple_choice_form.conversation_id(value=conversation_id) }}
+                {{ multiple_choice_form.question_id(value=current_question.id) }}
+                <div class="mb-3">
+                    <label for="question" class="form-label">{{ current_question.gpt_question }}<div class="form-text">
+                            <i>(Select all that apply)</i>
+                        </div></label>
+                    <ul class="list-group">
+                        {% for choice in multiple_choice_form.choices %}
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="checkbox" value="{{ choice[0] }}" name="question"
+                                id="choice-{{ choice[0] }}" aria-label="{{ choice[1] }}">
+                            <label for="choice-{{ choice[0] }}">{{ choice[1] }}</label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{{ url_for('gpt.question', question_id=get_previous_question_id(current_question.id), conversation_id=conversation_id) }}"
+                            class="btn btn-secondary me-2">Previous</a>
+                        {{ multiple_choice_form.submit(class="btn btn-primary me-2") }}
+                        <a href="{{ url_for('gpt.question', question_id=get_next_question_id(current_question.id), conversation_id=conversation_id) }}"
+                            class="btn btn-secondary">Next</a>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <form method="POST" id="question-form" onsubmit="return validateForm()">
+                {{ single_choice_form.hidden_tag() }}
+                {{ single_choice_form.conversation_id(value=conversation_id) }}
+                {{ single_choice_form.question_id(value=current_question.id) }}
+                <div class="mb-3">
+                    <label for="question" class="form-label">{{ current_question.gpt_question }}<div class="form-text">
+                            <i>(Select one)</i>
+                        </div></label>
+                    <ul class="list-group">
+                        {% for choice in single_choice_form.choices %}
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="question"
+                                id="choice-{{ choice[0] }}" value="{{ choice[0] }}">
+                            <label class="form-check-label" for="choice-{{ choice[0] }}">
+                                {{ choice[1] }}
+                            </label>
+
+                        </li>
+                    </ul>
+                    {% endfor %}
+                    </ul>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{{ url_for('gpt.question', question_id=get_previous_question_id(current_question.id), conversation_id=conversation_id) }}"
+                            class="btn btn-secondary me-2">Previous</a>
+                        {{ single_choice_form.submit(class="btn btn-primary me-2") }}
+                        <a href="{{ url_for('gpt.question', question_id=get_next_question_id(current_question.id), conversation_id=conversation_id) }}"
+                            class="btn btn-secondary">Next</a>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // after the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        // get the height of the question container
+        var questionContainerHeight = document.getElementById('question-container').offsetHeight;
+
+        // apply the height to the question list
+        var questionList = document.getElementById('question-list');
+        questionList.style.maxHeight = 500 + 'px';
+        questionList.style.overflowY = 'auto';
+
+        // Restore the scroll position when the page is reloaded
+        var scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            questionList.scrollTop = scrollPosition;
+        }
+
+        // Listen for the scroll event on the question list and save the current scroll position
+        questionList.addEventListener('scroll', function () {
+            localStorage.setItem('scrollPosition', questionList.scrollTop);
+            
+        });
+    });
+
+    document.getElementById('question-list').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Save the current scroll position to localStorage before the form is submitted
+        localStorage.setItem('scrollPosition', window.scrollY);
+    });
+
+    document.getElementById('question-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // remove existing highlights
+        let allChoices = document.querySelectorAll('input[name="question"]');
+        allChoices.forEach(function (input) {
+            let listItem = input.parentNode;
+            listItem.classList.remove('correct', 'incorrect');
+        });
+
+        // collect the user's selected answers
+        let userChoices = Array.from(document.querySelectorAll('input[name="question"]:checked')).map(function (input) {
+            return input.value;
+        });
+
+        // send the user's selected answers to the server
+        fetch("{{ url_for('gpt.submit_answer') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question_id: "{{ current_question.id }}",
+                user_choices: userChoices
+            })
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+            })
+            .then(function (json) {
+                let totalUserChoices = 0;
+                let totalCorrectAnswers = json.total_correct;
+                let correctChoicesCount = 0; // counts the number of correct choices made by the user
+                let incorrectChoicesCount = 0; // counts the number of incorrect choices made by the user
+
+                // for each choice, show the reasoning
+                for (let choice in json.reasoning) {
+                    let choiceElement = document.getElementById('choice-' + choice);
+                    if (!choiceElement) {
+                        console.error('No element found for choice: ', choice);
+                        continue;
+                    }
+                    let listItem = choiceElement.parentNode;
+
+                    // check if the answer was correct
+                    let isCorrect = json.user_choices_correctness[choice];
+
+                    // if this was a user choice, add the correct or incorrect class
+                    if (userChoices.includes(choice)) {
+                        if (isCorrect) {
+                            correctChoicesCount++;
+                            listItem.classList.add('correct');
+                        } else {
+                            incorrectChoicesCount++;
+                            listItem.classList.add('incorrect');
+                        }
+                        totalUserChoices++;
+                        listItem.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    }
+
+                    // create a new element to display the reasoning
+                    let reasoningId = 'reasoning-' + choice;
+                    let existingReasoning = document.getElementById(reasoningId);
+                    let reasoning = existingReasoning ? existingReasoning : document.createElement('p');
+                    reasoning.id = reasoningId;
+                    reasoning.textContent = json.reasoning[choice];
+                    reasoning.style.display = 'none'; // hidden by default
+
+                    // append the reasoning to the list item only if it does not already exist
+                    if (!existingReasoning) {
+                        listItem.appendChild(reasoning);
+                    }
+
+                    // toggle the visibility of the reasoning when the list item is clicked
+                    listItem.addEventListener('click', function () {
+                        reasoning.style.display = reasoning.style.display === 'none' ? 'block' : 'none';
+                    });
+
+                }
+                // calculate the score: correctChoices - incorrectChoices / totalCorrectAnswers
+                let score = correctChoicesCount - (incorrectChoicesCount * 0.5);
+                if (score < 0) { // in case of more incorrect choices than correct ones
+                    score = 0;
+                }
+                let percentageScore = (score / totalCorrectAnswers) * 100; // calculate the score as a percentage
+
+                // create and display the score element
+                let scoreElement = document.createElement('p');
+                scoreElement.textContent = `Score: ${percentageScore.toFixed(2)}%`; // display the score as a percentage
+                // if there is not already a scoreElement on the page then append
+                if (!document.getElementById('score')) {
+                    scoreElement.id = 'score';
+                    document.getElementById('question-form').appendChild(scoreElement);
+                }
+
+                // make the form fields read-only
+                allChoices.forEach(function (input) {
+                    input.disabled = true;
+                });
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+
+    function validateForm() {
+        // collect the user's selected answers
+        let userChoices = Array.from(document.querySelectorAll('input[name="question"]:checked')).map(function (input) {
+            return input.value;
+        });
+
+        // check if at least one option is selected
+        if (userChoices.length === 0) {
+            // show flash error message
+            let flashMessage = document.getElementById('flash-message');
+            flashMessage.textContent = 'Must select at least 1 option before submitting.';
+            flashMessage.style.position = 'fixed';
+            flashMessage.style.top = '50';
+            flashMessage.style.left = '25%';
+            flashMessage.style.textAlign = 'center';
+            flashMessage.style.justifyContent = 'center';
+            flashMessage.style.zIndex = '9999';
+            flashMessage.style.display = 'block';
+
+            // hide the flash message after 3 seconds
+            setTimeout(function () {
+                flashMessage.style.display = 'none';
+            }, 3000);
+
+            return false; // prevent form submission
+        }
+
+        return true; // allow form submission
+    }
+</script>
+{% endblock scripts %}

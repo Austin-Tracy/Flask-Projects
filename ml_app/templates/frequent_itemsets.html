@@ -1,0 +1,31 @@
+<!--ml_app/templates/frequent_itemsets.html-->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Frequent Itemsets</h1>
+    <p>Here, you can explore and interact with the frequent itemsets model.</p>
+
+    <form method="POST" class="mb-4">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.item.label(class="form-label") }}<br>
+            {{ form.item(class="form-control", size='1') }}<br>
+        </div>
+        <div>{{ form.submit(class="btn btn-primary") }}</div>
+    </form>
+
+    {% if recommendations %}
+    <h2 class="my-4">Specific Recommendations:</h2>
+    <ul class="list-group">
+        {% for item in recommendations %}
+        <li class="list-group-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <h2 class="my-4">EndCap Item:</h2>
+    <ul class="list-group">
+        <li class="list-group-item">Dust-Off Compressed Gas 2 pack</li>
+    </ul>
+</div>
+{% endblock %}

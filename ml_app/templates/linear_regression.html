@@ -1,0 +1,28 @@
+<!-- ml_app/templates/linear_regression.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Linear Regression</h1>
+    <p>Here, you can explore and interact with the linear regression model.</p>
+    <form action="{{ url_for('ml_app.linear_regression') }}" method="POST" class="row">
+        {{ form.csrf_token }}
+        {% for field in form if field.widget.input_type not in('submit', 'csrf_token') %}
+        {% if field.widget.input_type == 'range' %}
+        <div class="form-group col-md-6">
+            {{ field.label }}: <span id="{{ field.id }}_value" class="mx-2">{{ field.data }}</span>
+            {{ field(class="form-control", **{"data-toggle":"tooltip", "data-placement":"top", "title":field.description}) }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="col-md-12">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+    {% if prediction %}
+    <div class="container">
+        <h3>Predicted Monthly Charge: ${{ prediction }}</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

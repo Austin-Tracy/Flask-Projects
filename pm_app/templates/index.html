@@ -1,0 +1,60 @@
+<!--pm_app/templates/index.html-->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Welcome, {{ current_user.username }}!</h1>
+    <p>This is your landing page. Here, you can see an overview of your projects and tasks.</p>
+</div>
+
+<div class="container">
+    <h2>Your Projects</h2>
+    <div class="row">
+        {% for project in projects %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <a href="{{ url_for('main.project', project_id=project.id) }}" class="text-decoration-none">
+                <div class="card project-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.name }}</h5>
+                        <p class="card-text">{{ project.description }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% else %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <p>No projects found.</p>
+        </div>
+        {% endfor %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 new-project-button">
+            <a href="{{ url_for('main.create_project') }}" class="btn btn-primary"><b>+</b></a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Your Tasks</h2>
+    <div class="row">
+        {% for task in tasks %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <a href="{{ url_for('main.task', task_id=task.id) }}" class="text-decoration-none">
+                <div class="card task-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.title }}</h5>
+                        <p class="card-text">{{ task.description }}</p>
+                        <p class="card-text"><small class="text-muted">Due Date: {{ task.deadline.strftime('%b %d, %Y')
+                                if task.deadline }}</small></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% else %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <p>No tasks found.</p>
+        </div>
+        {% endfor %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 new-project-button">
+            <a href="{{ url_for('main.create_task')}}" class="btn btn-primary"><b>+</b></a>
+        </div>
+    </div>
+</div>
+{% endblock %}

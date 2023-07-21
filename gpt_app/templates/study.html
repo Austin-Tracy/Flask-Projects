@@ -1,0 +1,48 @@
+<!--/gpt_app/templates/study.html-->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Study Topics</h2>
+            <hr class="dropdown-divider">
+            <div class="row">
+                {% for study_conversation in study_conversations %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if study_conversation.study_histories.count() %}
+                                <a
+                                    href="{{ url_for('gpt.question', conversation_id=study_conversation.id, question_id=study_conversation.study_histories[0].id) }}">
+                                    {{ study_conversation.name }}
+                                </a>
+                                {% else %}
+                                {{ study_conversation.name }}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                Number of questions:
+                                <span class="badge bg-primary">{{ study_conversation.study_histories.count() }}</span>
+                            </p>
+                            <a href="{{ url_for('gpt.add_questions', conversation_id=study_conversation.id) }}"
+                                class="mt-3 btn btn-sm btn-outline-primary float-end mx-2">Add Questions</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST" action="{{ url_for('gpt.create_study_conversation') }}" class="mt-3"
+                id="create-conversation-form">
+                {{ form.csrf_token }}
+                <div class="mb-3">
+                    {{ form.name.label }}
+                    {{ form.name(class="form-control") }}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

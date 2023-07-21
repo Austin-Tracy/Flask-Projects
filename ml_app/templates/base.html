@@ -1,0 +1,78 @@
+<!-- ml_app/templates/base.html-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="static/img/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+</head>
+
+<body>
+    <div id="overlay" style="display: none;"></div>
+    <nav class="navbar navbar-expand-none navbar-light"
+        style="z-index: 1000; position: fixed; top: 0; width: calc(100%);">
+        <div style="display: flex; justify-content: flex-start; width: 100%;">
+
+            <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarSide"
+                aria-controls="navbarSide" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbarSide">
+            <div class="navbar-nav">
+                {% for route in routes %}
+                <a class="nav-item nav-link"
+                    style="left: 0; color: white; border: 2px solid #f2f2f2; border-radius: 5px; padding: 5px;"
+                    href="{{ url_for(route.url) }}">{{ route.name }}</a>
+                {% endfor %}
+                <a href="https://austintracy.dev/"><button>Back to all Projects</button></a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <h1>{% block header %}{% endblock %}</h1>
+        <!--Add in a summary, or text introduction, possibly a video introduction-->
+    </header>
+    {% block content %}
+    {% endblock %}
+    <!--
+        <footer>
+            <p>&copy;2023 austintracy.dev</p>
+        </footer>
+    -->
+    {% block scripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sideNav = document.querySelector('#navbarSide');
+            const overlay = document.querySelector('#overlay');
+
+            document.querySelector('.navbar-toggler').addEventListener('click', function () {
+                sideNav.classList.toggle('collapsed');
+
+                if (sideNav.classList.contains('collapsed')) {
+                    overlay.style.display = 'block';
+                } else {
+                    overlay.style.display = 'none';
+                }
+            });
+
+            overlay.addEventListener('click', function () {
+                sideNav.classList.remove('collapsed');
+                overlay.style.display = 'none';
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
+
+</html>

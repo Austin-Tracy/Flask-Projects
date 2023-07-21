@@ -1,0 +1,194 @@
+/* pm_app/static/css/custom.css */
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border: none;
+    border-radius: 5px;
+    margin: 0 auto;
+    width: 100%;
+    /* Set the width of the card to 100% of its container */
+    min-width: 500px;
+    /* Set a minimum width for the card */
+    min-height: 200px;
+    /* Set a minimum height for the card */
+    display: flex;
+    flex-direction: column;
+
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 1rem;
+    flex: 1;
+    position: relative;
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.card-text {
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.container {
+    max-width: 95vw;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.card-footer {
+    padding: 1rem;
+}
+
+.new-project-button {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+/* Add a new class for project cards */
+.project-card .card-text {
+    position: relative;
+    white-space: normal;
+    /* Change this to 'normal' for text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    /* Add this to enable -webkit-line-clamp */
+    -webkit-line-clamp: 5;
+    /* Set the number of lines you want to display before adding ellipsis */
+    -webkit-box-orient: vertical;
+    /* Set the box orientation to vertical */
+    max-height: 6.0rem;
+    /* Set the maximum height (3 lines * 1.2rem line-height) */
+    line-height: 1.2rem;
+    /* Set the line height */
+}
+
+/* Add a new class for task cards */
+.task-card .card-text {
+    position: relative;
+    white-space: normal;
+    /* Change this to 'normal' for text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    /* Add this to enable -webkit-line-clamp */
+    -webkit-line-clamp: 3;
+    /* Set the number of lines you want to display before adding ellipsis */
+    -webkit-box-orient: vertical;
+    /* Set the box orientation to vertical */
+    max-height: 3.6rem;
+    /* Set the maximum height (3 lines * 1.2rem line-height) */
+    line-height: 1.2rem;
+    /* Set the line height */
+}
+
+/* Add a new class for ml model cards */
+.ml-model-card .card-text {
+    position: relative;
+    white-space: normal;
+    /* Change this to 'normal' for text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    /* Add this to enable -webkit-line-clamp */
+    -webkit-line-clamp: 2;
+    /* Set the number of lines you want to display before adding ellipsis */
+    -webkit-box-orient: vertical;
+    /* Set the box orientation to vertical */
+    max-height: 2.4rem;
+    /* Set the maximum height (3 lines * 1.2rem line-height) */
+    line-height: 1.2rem;
+    /* Set the line height */
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px);
+}
+
+.response {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#gpt-form {
+    margin-bottom: 20px;
+}
+
+#loading {
+    font-size: larger;
+    display: none;
+}
+
+.h2,
+h4 {
+    color: #4a4a4a;
+    /* Dark gray */
+    font-weight: 500;
+    text-align: center;
+}
+
+body {
+    padding-top: 80px;
+    /* Adjust this value according to the height of your navbar */
+}
+
+@media (max-width: 800px) {
+
+    /* adjust this value to the point where your navbar collapses */
+    body.navbar-expanded {
+        margin-top: 180px;
+        /* adjust this value to the height of your expanded navbar */
+    }
+}
+
+/* Add this to your CSS file */
+.table thead th {
+    position: sticky;
+    top: 0;
+    background: white;
+    /* optional, to ensure the header remains visible over the data */
+    z-index: 2;
+    /* optional, to lift the header above the data rows */
+}
+
+.wrap-text {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.list-group-item.correct {
+    background-color: lightgreen !important;
+}
+
+.list-group-item.incorrect {
+    background-color: pink !important;
+}

@@ -1,0 +1,63 @@
+/* gpt_app/static/css/custom.css */
+
+.container.top-container {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.h2, h4 {
+    color: #4a4a4a;  /* Dark gray */
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-check {
+    margin-bottom: 10px;
+}
+
+.form-check-input {
+    margin-right: 10px;
+}
+
+.form-check-label {
+    color: #333333;  /* Darker gray */
+}
+
+.btn-primary {
+    background-color: #007bff;  /* A different shade of blue */
+    border: none;
+}
+
+#study-conversation-list .list-group-item-action {
+    transition: 0.3s;
+}
+
+#study-conversation-list .list-group-item-action:hover {
+    background-color: #f8f9fa;  /* Light gray */
+}
+
+#answer_result {
+    color: #28a745;  /* Green */
+}
+
+#loading {
+    display: none;
+}
+
+#study-conversation {
+    margin-bottom: 20px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.container.top-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.container.top-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}

@@ -1,0 +1,51 @@
+<!-- pm_app/templates/task.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ task.title }}</h1>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">Description</th>
+                <td>{{ task.description }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Deadline</th>
+                <td>{{ task.deadline.strftime('%b %d, %Y') if task.deadline }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Project</th>
+                <td>{{ task.project.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <h2>Task History</h2>
+    <div class="task-history-container" style="max-height: 400px; overflow-y: scroll; fill-rule: evenodd;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Attribute</th>
+                    <th scope="col">Old Value</th>
+                    <th scope="col">New Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for change in task_history %}
+                <tr>
+                    <td>{{ change.date.strftime('%b %d, %Y') }}</td>
+                    <td>{{ change.attribute }}</td>
+                    <td>{{ change.old_value }}</td>
+                    <td>{{ change.new_value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{{ url_for('main.project', project_id=task.project_id) }}" class="btn btn-primary">Back</a>
+    <a href="{{ url_for('main.edit_task', task_id=task.id) }}" class="btn btn-primary">Edit</a>
+</div>
+{% endblock %}
