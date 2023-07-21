@@ -29,8 +29,6 @@ This is a GPT application developed to manage and create interactive study conve
 
 ### Forms
 
-- `GPTForm`: A FlaskForm class for the GPT chatbot form.
-- `CreateConversationForm`: A FlaskForm class for creating a new conversation.
 - `CreateStudyConversationForm`: A FlaskForm class for creating a new study conversation.
 - `StudyConversationFormSingleChoice`: A FlaskForm class for a study conversation with single choice questions.
 - `StudyConversationFormMultipleChoice`: A FlaskForm class for a study conversation with multiple choice questions.
