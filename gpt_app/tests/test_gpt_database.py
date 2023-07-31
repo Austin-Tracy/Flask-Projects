@@ -6,7 +6,6 @@ from datetime import datetime as dt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from gpt_app.models import Base
-import pytest
 
 @pytest.fixture(scope='function')
 def db_session():
